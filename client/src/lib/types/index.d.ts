@@ -1,4 +1,4 @@
-interface Activity {
+type Activity = {
     id: string
     title: string
     date: Date
@@ -11,7 +11,14 @@ interface Activity {
     longitude: number
 }
 
-export type LocationIQ = {
+type User = {
+  id: string
+  email: string
+  displayName: string
+  imageUrl?: string
+}
+
+type LocationIQ = {
   place_id: string
   osm_id: string
   osm_type: string
@@ -27,7 +34,7 @@ export type LocationIQ = {
   address: LocationIQAddress
 }
 
-export type LocationIQAddress = {
+type LocationIQAddress = {
   name: string
   house_number: string
   road: string
