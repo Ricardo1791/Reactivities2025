@@ -20,6 +20,7 @@ namespace Domain
         public double Longitude { get; set; }
 
         public ICollection<ActivityAtendee> Atendees { get; set; } = [];
+        public ICollection<Comment> Comments { get; set; } = [];
 
     }
 }

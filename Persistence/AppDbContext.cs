@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Persistence
         public required DbSet<Activity> Activities { get; set; }
         public required DbSet<ActivityAtendee> ActivityAtendees { get; set; }
         public required DbSet<Photo> Photos { get; set; }
+        public required DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,6 +27,22 @@ namespace Persistence
             builder.Entity<ActivityAtendee>().HasOne(x => x.Activity).WithMany(x => x.Atendees)
                 .HasForeignKey(x => x.ActivityId);
 
+            var datetimeConverter = new ValueConverter<DateTime, DateTime>(
+                v => v.ToUniversalTime(),
+                v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                
+            );
+
+            foreach(var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach(var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(datetimeConverter);
+                    }
+                }
+            }
         }
     }
 }
